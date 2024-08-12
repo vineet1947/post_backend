@@ -28,20 +28,33 @@ exports.getNoteById = async (req, res) => {
   }
 }
 
-// Query notes by title substring
 exports.queryNotesByTitle = async (req, res) => {
   try {
     const titleSubstring = req.query.title || ''
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 10
 
+    // Handle pagination in the controller
+    const skip = (page - 1) * limit
+
+    // Fetch notes and total count from the service
     const notes = await noteService.queryNotesByTitle(
       titleSubstring,
-      page,
+      skip,
       limit
     )
+    const totalCount = await noteService.getTotalCountByTitle(titleSubstring)
+    const totalPages = Math.ceil(totalCount / limit)
 
-    res.status(200).json(messageBuilder.successResponse(200, notes))
+    const response = {
+      result: notes,
+      totalItems: totalCount,
+      totalPages: totalPages,
+      currentPage: page,
+      itemsPerPage: limit,
+    }
+
+    res.status(200).json(messageBuilder.successResponse(200, response))
   } catch (error) {
     console.error(error.message)
     res.status(500).json(messageBuilder.errorResponse(500, error.message))
@@ -58,6 +71,30 @@ exports.updateNote = async (req, res) => {
         .json(messageBuilder.errorResponse(404, 'Note not found'))
     }
     res.status(200).json(messageBuilder.successResponse(200, note))
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).json(messageBuilder.errorResponse(500, error.message))
+  }
+}
+ 
+exports.deleteNote = async (req, res) => {
+  try {
+    const noteId = req.params.id
+    const deletedNote = await noteService.deleteNote(noteId)
+
+    if (!deletedNote) {
+      return res
+        .status(404)
+        .json(messageBuilder.errorResponse(404, 'Note not found'))
+    }
+
+    res
+      .status(200)
+      .json(
+        messageBuilder.successResponse(200, {
+          message: 'Note deleted successfully',
+        })
+      )
   } catch (error) {
     console.error(error.message)
     res.status(500).json(messageBuilder.errorResponse(500, error.message))

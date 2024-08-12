@@ -3,9 +3,6 @@ const router = express.Router();
 const noteController = require('../controllers/NoteController')
 const dataValidator = require('../validators/DataValidator')
 const validateMiddleware = require('../middlewares/validate')
-// const cacheMiddleware = require('../middlewares/caching')
-
-// Add cacheMiddleware() in between route functions to enable caching
 
 /**
  * @swagger
@@ -117,7 +114,7 @@ router.get('/notes/:id', noteController.getNoteById)
  *               items:
  *                 $ref: '#/components/schemas/Note'
  */
-router.get('/notes', noteController.queryNotesByTitle)
+router.get('/notes-by-title', noteController.queryNotesByTitle)
 
 /**
  * @swagger

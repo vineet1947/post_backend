@@ -35,25 +35,17 @@ exports.deleteNote = async (id) => {
   return deletedNote
 }
 
-// Query notes by title substring
-exports.queryNotesByTitle = async (titleSubstring, page, limit) => {
-  const skip = (page - 1) * limit
-  const notes = await NoteModel.find({
+exports.queryNotesByTitle = async (titleSubstring, skip, limit) => {
+  return NoteModel.find({
     title: { $regex: titleSubstring, $options: 'i' },
   })
     .skip(skip)
     .limit(limit)
+}
 
-  const totalCount = await NoteModel.countDocuments({
+// Get total count of notes matching the title substring
+exports.getTotalCountByTitle = async (titleSubstring) => {
+  return NoteModel.countDocuments({
     title: { $regex: titleSubstring, $options: 'i' },
   })
-  const totalPages = Math.ceil(totalCount / limit)
-
-  return {
-    result: notes,
-    totalItems: totalCount,
-    totalPages,
-    currentPage: page,
-    itemsPerPage: limit,
-  }
 }
