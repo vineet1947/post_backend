@@ -5,7 +5,7 @@ const cors = require('cors')
 
 const app = express()
 const config = require('./src/config/config')
-const routes = require('./src/routes/PostRoutes')
+const routes = require('./src/routes/noteRoutes')
 
 const { errorHandler } = require('./src/middlewares/errorHandling')
 const { connect, databaseConnection } = require('./src/config/database')
