@@ -1,8 +1,9 @@
 const NoteModel = require('../models/noteModel')
 
 // Fetch all notes
-exports.getNotes = async () => {
-  const notes = await NoteModel.find()
+exports.getNotes = async (page, limit) => {
+  const skip = (page - 1) * limit
+  const notes = await NoteModel.find().skip(skip).limit(limit)
   return notes
 }
 
@@ -32,4 +33,27 @@ exports.updateNote = async (id, data) => {
 exports.deleteNote = async (id) => {
   const deletedNote = await NoteModel.findByIdAndDelete(id)
   return deletedNote
+}
+
+// Query notes by title substring
+exports.queryNotesByTitle = async (titleSubstring, page, limit) => {
+  const skip = (page - 1) * limit
+  const notes = await NoteModel.find({
+    title: { $regex: titleSubstring, $options: 'i' },
+  })
+    .skip(skip)
+    .limit(limit)
+
+  const totalCount = await NoteModel.countDocuments({
+    title: { $regex: titleSubstring, $options: 'i' },
+  })
+  const totalPages = Math.ceil(totalCount / limit)
+
+  return {
+    result: notes,
+    totalItems: totalCount,
+    totalPages,
+    currentPage: page,
+    itemsPerPage: limit,
+  }
 }
