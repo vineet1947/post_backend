@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const leaderController = require('../controllers/LeaderboardController');
+const leaderController = require('../controllers/PostController')
 const dataValidator = require('../validators/DataValidator');
 const validateMiddleware = require('../middlewares/validate');
 const cacheMiddleware = require('../middlewares/caching')

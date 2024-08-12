@@ -9,19 +9,18 @@ const routes= require('./routes/LeaderboardRoutes');
 const { errorHandler } = require('./middlewares/errorHandling');
 const { connect, databaseConnection } = require('./config/database');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./swagger');
-const { cache, cacheConnection } = require('./config/redis');
+const swaggerSpecs = require('./swagger')
 
-
-app.use(express.json());
+app.use(express.json())
 app.use(compression())
-app.use(cors());
-app.use(errorHandler);
+app.use(cors())
+app.use(errorHandler)
 
 // Serve Swagger UI at '/api-docs'
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
 
-app.use('/api', routes);
+app.use('/api', routes)
+
 app.get("/api/health", (req, res) => {
   res.json({
     success: true
@@ -32,11 +31,10 @@ app.get("/api/health", (req, res) => {
 
 const startServer = async () => {
   try {
-    await databaseConnection();
-    await cacheConnection();
+    await databaseConnection()
     app.listen(config.port, () => {
-      console.log(`Standard Server is running on port ${config.port}`);
-    });
+      console.log(`Standard Server is running on port ${config.port}`)
+    })
   } catch (error) {
     console.error('Failed to start server:', error);
   }
