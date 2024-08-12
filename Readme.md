@@ -11,32 +11,46 @@ This repository contains the Notes Microservice, built with Node.js, Express, an
 
 ### Standalone Express Server
 
-1. Install dependencies:
+1. **Install Dependencies:**
 
    ```bash
    npm install
    ```
 
-2. Start the server:
+2. **Configure MongoDB URI:**
+
+   Create a `.env` file in the root directory and add your MongoDB connection URI:
+
+   ```
+   MONGODB_URI=your-mongodb-uri
+   ```
+
+3. **Start the Server:**
 
    ```bash
    npm run dev
    ```
 
    Access the application at `http://localhost:3000`.
-    Access the sawgger application at `http://localhost:3000/api-docs`.
+   Access the Swagger documentation at `http://localhost:3000/api-docs`.
 
 ### Docker Build
 
-1. Build and deploy your Docker container:
+1. **Build and Deploy Docker Container:**
 
    ```bash
    docker build -t your-image-name .
    ```
 
+2. **Run Docker Container:**
+
+   ```bash
+   docker run -p 3000:3000 --env-file .env your-image-name
+   ```
+
 ## Development
 
-To apply code changes, just save the file nodemon will take care
+To apply code changes, just save the file and `nodemon` will automatically restart the server:
 
 ```bash
 npm run dev

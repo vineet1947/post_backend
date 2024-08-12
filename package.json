@@ -1,8 +1,13 @@
 {
-  "name": "leaderboard",
-  "version": "1.0.0",
-  "description": "Leaderboard API's",
+  "name": "Notes",
+  "version": "0.0.1",
+  "description": "Notes API's",
   "main": "src/index.js",
+  "author": {
+    "email": "vineetkverma1947@gmail.com",
+    "name": "Vineet Kumar Verma",
+    "organization": ""
+  },
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon index.js",
