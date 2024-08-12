@@ -32,7 +32,6 @@ const validateMiddleware = require('../middlewares/validate')
  *           format: date-time
  *           description: The last update date of the note
  *       example:
- *         id: d290f1ee-6c54-4b01-90e6-d701748f0851
  *         title: Example Note
  *         body: This is an example note.
  *         created_at: 2024-08-12T14:45:00Z
