@@ -11,7 +11,31 @@ exports.createNote = async (req, res) => {
     res.status(500).json(messageBuilder.errorResponse(500, error.message))
   }
 }
+exports.getNotes = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1 // Default to page 1 if not specified
+    const limit = parseInt(req.query.limit) || 10 // Default to 10 items per page if not specified
 
+    // Fetch notes and total count
+    const skip = (page - 1) * limit
+    const notes = await noteService.getNotes(page, limit)
+    const totalCount = await noteService.getTotalCount() // Assuming this method exists in your service layer
+    const totalPages = Math.ceil(totalCount / limit)
+
+    const response = {
+      result: notes,
+      totalItems: totalCount,
+      totalPages: totalPages,
+      currentPage: page,
+      itemsPerPage: limit,
+    }
+
+    res.status(200).json(messageBuilder.successResponse(200, response))
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).json(messageBuilder.errorResponse(500, error.message))
+  }
+}
 // Get a note by its ID
 exports.getNoteById = async (req, res) => {
   try {

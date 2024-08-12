@@ -96,6 +96,54 @@ router.get('/notes/:id', noteController.getNoteById)
  * @swagger
  * /api/notes:
  *   get:
+ *     summary: Fetch all notes with pagination
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: The page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: The number of items per page
+ *     responses:
+ *       200:
+ *         description: A list of notes with pagination metadata
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Note'
+ *                 totalItems:
+ *                   type: integer
+ *                   description: The total number of notes
+ *                 totalPages:
+ *                   type: integer
+ *                   description: The total number of pages
+ *                 currentPage:
+ *                   type: integer
+ *                   description: The current page number
+ *                 itemsPerPage:
+ *                   type: integer
+ *                   description: The number of items per page
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/notes', noteController.getNotes);
+
+/**
+ * @swagger
+ * /api/notes-by-title:
+ *   get:
  *     summary: Query notes by title substring
  *     tags: [Notes]
  *     parameters:
@@ -104,15 +152,44 @@ router.get('/notes/:id', noteController.getNoteById)
  *         schema:
  *           type: string
  *         description: The substring to search for in the title
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: The page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: The number of items per page
  *     responses:
  *       200:
- *         description: A list of matching notes
+ *         description: A list of matching notes with pagination metadata
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Note'
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Note'
+ *                 totalItems:
+ *                   type: integer
+ *                   description: The total number of matching notes
+ *                 totalPages:
+ *                   type: integer
+ *                   description: The total number of pages
+ *                 currentPage:
+ *                   type: integer
+ *                   description: The current page number
+ *                 itemsPerPage:
+ *                   type: integer
+ *                   description: The number of items per page
+ *       500:
+ *         description: Internal server error
  */
 router.get('/notes-by-title', noteController.queryNotesByTitle)
 
@@ -152,5 +229,30 @@ router.put(
   validateMiddleware(dataValidator),
   noteController.updateNote
 )
+
+/**
+ * @swagger
+ * /api/notes/{id}:
+ *   delete:
+ *     summary: Delete a note by id
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The note id
+ *     responses:
+ *       200:
+ *         description: The deleted note
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Note'
+ *       404:
+ *         description: Note not found
+ */
+router.delete('/notes/:id', noteController.deleteNote)
 
 module.exports = router

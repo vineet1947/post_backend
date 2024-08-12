@@ -49,3 +49,13 @@ exports.getTotalCountByTitle = async (titleSubstring) => {
     title: { $regex: titleSubstring, $options: 'i' },
   })
 }
+ 
+exports.getTotalCount = async () => {
+  try {
+    const count = await NoteModel.countDocuments(query)
+    return count
+  } catch (error) {
+    console.error('Error fetching total count:', error.message)
+    throw new Error('Error fetching total count')
+  }
+}
